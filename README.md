@@ -8,7 +8,7 @@
 This is a plotting library for use with [matplotlib](http://matplotlib.org/index.html) to make [ternary plots](http://en.wikipedia.org/wiki/Ternary_plot)
 plots in the two dimensional simplex projected onto a two dimensional plane.
 
-The library provides functions for plotting projected lines, curves (trajectories), scatter plots, and heatmaps. There are [several examples](https://github.com/marcharper/python-ternary/blob/master/examples.py) and a short tutorial below.
+The library provides functions for plotting projected lines, curves (trajectories), scatter plots, and heatmaps. There are [several examples](examples/) and a short tutorial below.
 
 # Gallery
 
@@ -31,18 +31,13 @@ From <a href="http://biorxiv.org/content/early/2017/06/07/145631">Genetic Drift 
 See the citations below for more example images.
 </div>
 
-# Citations and Recent Usage in Publications:
+# Citations and Recent Usage in Publications
+
+[![DOI](https://zenodo.org/badge/19505/marcharper/python-ternary.svg)](https://zenodo.org/badge/latestdoi/19505/marcharper/python-ternary)
 
 Have you used python-ternary in a publication? Open a PR or issue to include your citations or example plots!
 
-- [Genetic Drift and Selection in Many-Allele Range Expansions](http://biorxiv.org/content/early/2017/06/07/145631) by [Bryan T. Weinstein](https://github.com/btweinstein), Maxim O. Lavrentovich, Wolfram Möbius, Andrew W. Murray, and David R. Nelson (2017)
-- [Gibbs Sampler-Based λ-Dynamics and Rao–Blackwell Estimator for Alchemical Free Energy Calculation](http://pubs.acs.org/doi/abs/10.1021/acs.jctc.7b00204?src=recsys&journalCode=jctcce) by Xinqiang Ding, Jonah Z. Vilseck, Ryan L. Hayes, and Charles L. Brooks (2017)
-- [PREDICTD: PaRallel Epigenomics Data Imputation With Cloud-based Tensor Decomposition](http://biorxiv.org/content/early/2017/04/04/123927) by Timothy J Durham, Maxwell W Libbrecht, Jeffry Howbert, Jeffrey Bilmes, William S Noble (2017)
-- Kottke, Daniel, et al. [Multi-class probabilistic active learning](http://ebooks.iospress.nl/publication/44803) Proc. of the 22nd Europ. Conf. on Artificial Intelligence (ECAI2016). 2016.
-- [On the origins of three-dimensionality in drug-like molecules](http://www.future-science.com/doi/full/10.4155/fmc-2016-0095) by Joshua Meyers, Michael Carter, N Yi Mok, and Nathan Brown (2016)
-- [Stationary Stability for Evolutionary Dynamics in Finite Populations](http://www.mdpi.com/1099-4300/18/9/316/htm) by Marc Harper and Dashiell Fryer. Entropy 18.9 (2016): 316.
-- [pyIAST: Ideal adsorbed solution theory (IAST) Python package](http://www.sciencedirect.com/science/article/pii/S0010465515004403) by [Cory Simon](https://github.com/CorySimon) (2016)
-- [Lyapunov Functions for Time-Scale Dynamics on Riemannian Geometries of the Simplex](https://link.springer.com/article/10.1007/s13235-014-0124-0) by Marc Harper and Dashiell Fryer. Dynamic Games and Applications (2015) 
+See the [partial list of citations](citations.md) and [instructions on how to cite](CITATION.md).
 
 # Installation
 
@@ -78,7 +73,7 @@ The master branch is kept in a good working state and should be fine for general
 
 # Usage, Examples, Plotting Functions
 
-You can explore some of these examples with [this Jupyter notebook](Ternary-Examples.ipynb).
+You can explore some of these examples with [this Jupyter notebook](examples/Ternary-Examples.ipynb).
 
 The easiest way to use python-ternary is with the wrapper class `TernaryAxesSubplot`,
 which mimics Matplotlib's AxesSubplot. Start with:
@@ -165,8 +160,9 @@ The following code draws a boundary for the simplex and gridlines.
 
     ternary.plt.show()
 ```
-
-![Ternary Plot -- Boundary and Gridlines](/readme_images/boundary_and_gridlines.png)
+<p align="center">
+<img src="/readme_images/boundary_and_gridlines.png" width="600" height="450"/>
+</p>
 
 ## Drawing lines
 
@@ -205,7 +201,9 @@ You can draw individual lines between any two points with `line` and lines paral
 
 The line drawing functions accept the matplotlib keyword arguments of [Line2D](http://matplotlib.org/api/lines_api.html).
 
-![Ternary Plot -- Various Lines](/readme_images/various_lines.png)
+<p align="center">
+<img src="/readme_images/various_lines.png" width="500" height="375"/>
+</p>
 
 ## Curves
 
@@ -236,7 +234,9 @@ Points is a list of tuples or numpy arrays, such as [(0.5, 0.25, 0.25), (1./3, 1
     tax.show()
 ```
 
-![Ternary Curve Plot](/readme_images/trajectory.png)
+<p align="center">
+<img src="/readme_images/trajectory.png" width="500" height="375"/>
+</p>
 
 There are many more examples in [this paper](http://arxiv.org/abs/1210.5539).
 
@@ -245,7 +245,9 @@ You can also color the curves with a Matplotlib heatmap using:
     plot_colored_trajectory(points, cmap="hsv", linewidth=2.0)
 ```
 
-![Ternary Curve Plot](/readme_images/colored_trajectory.png)
+<p align="center">
+<img src="/readme_images/colored_trajectory.png" width="600" height="450"/>
+</p>
 
 ## Scatter Plots
 
@@ -271,7 +273,9 @@ Similarly, ternary can make scatter plots:
     tax.show()
 ```
 
-![Ternary Scatter Plot Example](/readme_images/scatter.png)
+<p align="center">
+<img src="/readme_images/scatter.png" width="500" height="375"/>
+</p>
 
 ## Heatmaps
 
@@ -289,14 +293,13 @@ triangles &#9661;
 the simplex up into hexagonal regions
 
 The two triangular heatmap styles and the hexagonal heatmap style can be visualized
-as follows. The `dual-triangular` style plots the true values on the upright triangles,
-mapping ternary coordinates to upright triangles otherwise. The `triangular` style
-maps ternary coordinates to vertices and computes the triangle color based on the
-values at the vertices.
+as follows: left is triangular, right is dual triangular.
 
-<img src ="/readme_images/heatmap-grids.png" width="500" height="250"/>
+<p align="center">
+<img src="/readme_images/heatmap-grids.png" width="500" height="250"/><br/>
+<img src="/readme_images/heatmap_styles_cubehelix.png"/><br/>
+</p>
 
-![](/readme_images/heatmap_styles_cubehelix.png)
 
 Thanks to [chebee7i](https://github.com/chebee7i) for the above images.
 
@@ -332,7 +335,9 @@ In this case the keyword argument *boundary* indicates whether you wish to evalu
 
 You may specify a [matplotlib colormap](http://matplotlib.org/examples/color/colormaps_reference.html) (an instance or the colormap name) in the cmap argument.
 
-![Ternary Heatmap Examples](/readme_images/heatmap_shannon.png)
+<p style="text-align:center">
+<img src="/readme_images/heatmap_shannon.png"/> <br/>
+</p>
 
 Ternary can also make heatmaps from data. In this case you need to supply a dictionary
 mapping `(i, j)` or `(i, j, k)` for `i + j + k = scale` to a float as input for a heatmap. It is not necessary to include `k` in the dictionary keys since it can be determined from `scale`, `i`, and `j`. This reduces the memory requirements when the partition is very fine (significant when `scale` is in the hundreds).
@@ -351,11 +356,10 @@ or on a `TernaryAxesSubplot` object:
 
 This can produces images such as:
 
-![Ternary Heatmap Examples](/readme_images/heatmap-dual_vs_triangular.png)
-
-![Ternary Heatmap Examples](/readme_images/heatmap_rsp.png)
-
-There is a large set of heatmap examples [here](http://www.marcharper.net/stationary_examples/index.html).
+<p align="center">
+<img src="/readme_images/heatmap-dual_vs_triangular.png" width="1200" height="260"/> <br/>
+<img src="/readme_images/heatmap_rsp.png" width="500" height="375"/>
+</p>
 
 # Axes Ticks and Orientations
 
@@ -364,7 +368,9 @@ corresponding to the clockwise and counterclockwise orientations. However note
 that the axes labels need to be adjusted accordingly, and `ternary` does not
 do so automatically when you pass `clockwise=True` to `tax.ticks()`.
 
-![](/readme_images/orientations.png)
+<p align="center">
+<img src="/readme_images/orientations.png"/>
+</p>
 
 There is a [more detailed discussion](https://github.com/marcharper/python-ternary/issues/18) on issue #18 (closed).
 
@@ -378,39 +384,43 @@ inclusion of a colorbar. Here is an example:
 
 ```python
     import math
-    from matplotlib import pyplot
+    from matplotlib import pyplot as plt
     import ternary
 
-    def color_point(x, y, z, scale):
-        w = 255
-        x_color = x * w / float(scale)
-        y_color = y * w / float(scale)
-        z_color = z * w / float(scale)
-        r = math.fabs(w - y_color) / w
-        g = math.fabs(w - x_color) / w
-        b = math.fabs(w - z_color) / w
-        return (r, g, b, 1.)
+def color_point(x, y, z, scale):
+    w = 255
+    x_color = x * w / float(scale)
+    y_color = y * w / float(scale)
+    z_color = z * w / float(scale)
+    r = math.fabs(w - y_color) / w
+    g = math.fabs(w - x_color) / w
+    b = math.fabs(w - z_color) / w
+    return (r, g, b, 1.)
 
-    def generate_heatmap_data(scale=5):
-        from ternary.helpers import simplex_iterator
-        d = dict()
-        for (i, j, k) in simplex_iterator(scale):
-            d[(i, j, k)] = color_point(i, j, k, scale)
-        return d
 
-    scale = 80
-    data = generate_heatmap_data(scale)
-    figure, tax = ternary.figure(scale=scale, permutation="210")
-    tax.heatmap(data, style="hexagonal", colormap=False) # Allow colors as rgba tuples
-    tax.boundary()
-    tax.set_title("RGBA Heatmap")
-    pyplot.show()
+def generate_heatmap_data(scale=5):
+    from ternary.helpers import simplex_iterator
+    d = dict()
+    for (i, j, k) in simplex_iterator(scale):
+        d[(i, j, k)] = color_point(i, j, k, scale)
+    return d
+
+
+scale = 80
+data = generate_heatmap_data(scale)
+figure, tax = ternary.figure(scale=scale)
+tax.heatmap(data, style="hexagonal", use_rgba=True)
+tax.boundary()
+tax.set_title("RGBA Heatmap")
+plt.show()
+
 ```
 
 This produces the following image:
 
-![Ternary Heatmap Examples](/readme_images/rgba_example.png)
-
+<p align="center">
+<img src="/readme_images/rgba_example.png" width="450" height="450"/>
+</p>
 
 # Unittests
 
@@ -420,22 +430,12 @@ You can run the test suite as follows:
 python -m unittest discover tests
 ```
 
-The included script of [examples](https://github.com/marcharper/python-ternary/blob/master/examples.py) is intended to act as a series of extended tests.
+The included script of [examples](/examples/examples.py) is intended to act as a series of extended tests.
 
 # Contributing
 
 Contributions are welcome! Please share any nice example plots, contribute
 features, and add unit tests! Use the pull request and issue systems to contribute.
-
-# Citation
-
-[![DOI](https://zenodo.org/badge/19505/marcharper/python-ternary.svg)](https://zenodo.org/badge/latestdoi/19505/marcharper/python-ternary)
-
-Please cite as follows:
-
-```
-Marc Harper et al. (2015). python-ternary: Ternary Plots in Python. Zenodo. 10.5281/zenodo.34938
-```
 
 # Contributors
 

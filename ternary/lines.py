@@ -4,7 +4,6 @@ Line plotting functions, draw boundary and gridlines.
 
 from numpy import arange
 from matplotlib.lines import Line2D
-from matplotlib import pyplot
 
 from .helpers import project_point
 
@@ -31,6 +30,7 @@ def line(ax, p1, p2, permutation=None, **kwargs):
     pp2 = project_point(p2, permutation=permutation)
     ax.add_line(Line2D((pp1[0], pp2[0]), (pp1[1], pp2[1]), **kwargs))
 
+
 def horizontal_line(ax, scale, i, **kwargs):
     """
     Draws the i-th horizontal line parallel to the lower axis.
@@ -50,6 +50,7 @@ def horizontal_line(ax, scale, i, **kwargs):
     p1 = (0, i, scale - i)
     p2 = (scale - i, i, 0)
     line(ax, p1, p2, **kwargs)
+
 
 def left_parallel_line(ax, scale, i,  **kwargs):
     """
@@ -71,6 +72,7 @@ def left_parallel_line(ax, scale, i,  **kwargs):
     p2 = (i, 0, scale - i)
     line(ax, p1, p2, **kwargs)
 
+
 def right_parallel_line(ax, scale, i, **kwargs):
     """
     Draws the i-th line parallel to the right axis.
@@ -90,6 +92,7 @@ def right_parallel_line(ax, scale, i, **kwargs):
     p1 = (0, scale - i, i)
     p2 = (scale - i, 0, i)
     line(ax, p1, p2, **kwargs)
+
 
 ## Boundary, Gridlines ##
 
@@ -111,7 +114,7 @@ def boundary(ax, scale, axes_colors=None, **kwargs):
         e.g. {'l': 'g'} for coloring the left axis boundary green
     """
 
-    # set default color as black
+    # Set default color as black.
     if axes_colors is None:
         axes_colors = dict()
     for _axis in ['l', 'r', 'b']:
@@ -123,17 +126,18 @@ def boundary(ax, scale, axes_colors=None, **kwargs):
     right_parallel_line(ax, scale, 0, color=axes_colors['r'], **kwargs)
     return ax
 
+
 def merge_dicts(base, updates):
-    '''
+    """
     Given two dicts, merge them into a new dict as a shallow copy.
 
     Parameters
     ----------
     base: dict
-        The base dictionary
+        The base dictionary.
     updates: dict
-        Secondary dictionary whose values override the base
-    '''
+        Secondary dictionary whose values override the base.
+    """
     if not base:
         base = dict()
     if not updates:
@@ -142,7 +146,9 @@ def merge_dicts(base, updates):
     z.update(updates)
     return z
 
-def gridlines(ax, scale, multiple=None, horizontal_kwargs=None, left_kwargs=None, right_kwargs=None, **kwargs):
+
+def gridlines(ax, scale, multiple=None, horizontal_kwargs=None,
+              left_kwargs=None, right_kwargs=None, **kwargs):
     """
     Plots grid lines excluding boundary.
 
@@ -185,8 +191,23 @@ def gridlines(ax, scale, multiple=None, horizontal_kwargs=None, left_kwargs=None
         right_parallel_line(ax, scale, i, **right_kwargs)
     return ax
 
+
+def normalize_tick_formats(tick_formats):
+    if type(tick_formats) == dict:
+        return tick_formats
+    if tick_formats is None:
+        s = '%d'
+    elif type(tick_formats) == str:
+        s = tick_formats
+    else:
+        raise TypeError("tick_formats must be a dictionary of strings"
+                        " a string, or None.")
+    return {'b': s, 'l': s, 'r': s}
+
+
 def ticks(ax, scale, ticks=None, locations=None, multiple=1, axis='b',
-          offset=0.01, clockwise=False, axes_colors=None, fsize = 10, **kwargs):
+          offset=0.01, clockwise=False, axes_colors=None, fontsize=10,
+          tick_formats=None, **kwargs):
     """
     Sets tick marks and labels.
 
@@ -213,6 +234,12 @@ def ticks(ax, scale, ticks=None, locations=None, multiple=1, axis='b',
     axes_colors: Dict, None
         Option to color ticks differently for each axis, 'l', 'r', 'b'
         e.g. {'l': 'g', 'r':'b', 'b': 'y'}
+    tick_formats: None, Dict, Str
+        If None, all axes will be labelled with ints. If Dict, the keys are
+        'b', 'l' and 'r' and the values are format strings e.g. "%.3f" for
+        a float with 3 decimal places or "%.3e" for scientific format with
+        3 decimal places or "%d" for ints. If tick_formats is a string, it
+        is assumed that this is a format string to be applied to all axes.
     kwargs:
         Any kwargs to pass through to matplotlib.
 
@@ -233,6 +260,8 @@ def ticks(ax, scale, ticks=None, locations=None, multiple=1, axis='b',
     if not ticks:
         locations = arange(0, scale + multiple, multiple)
         ticks = locations
+
+    tick_formats = normalize_tick_formats(tick_formats)
 
     # Default color: black
     if axes_colors is None:
@@ -258,8 +287,9 @@ def ticks(ax, scale, ticks=None, locations=None, multiple=1, axis='b',
                 tick = ticks[index]
             line(ax, loc1, loc2, color=axes_colors['r'], **kwargs)
             x, y = project_point(text_location)
-            ax.text(x, y, str(tick), horizontalalignment="center", 
-                color=axes_colors['r'], fontsize=fsize)
+            s = tick_formats['r'] % tick
+            ax.text(x, y, s, horizontalalignment="center",
+                    color=axes_colors['r'], fontsize=fontsize)
 
     if 'l' in axis:
         for index, i in enumerate(locations):
@@ -276,8 +306,9 @@ def ticks(ax, scale, ticks=None, locations=None, multiple=1, axis='b',
                 tick = ticks[-(index+1)]
             line(ax, loc1, loc2, color=axes_colors['l'], **kwargs)
             x, y = project_point(text_location)
-            ax.text(x, y, str(tick), horizontalalignment="center",
-                color=axes_colors['l'], fontsize=fsize)
+            s = tick_formats['l'] % tick
+            ax.text(x, y, s, horizontalalignment="center",
+                    color=axes_colors['l'], fontsize=fontsize)
 
     if 'b' in axis:
         for index, i in enumerate(locations):
@@ -290,9 +321,10 @@ def ticks(ax, scale, ticks=None, locations=None, multiple=1, axis='b',
             else:
                 # Left parallel
                 loc2 = (i, -offset, 0)
-                text_location = (i + 0.5 * offset, - 3.5 * offset, 0)
+                text_location = (i + 0.5 * offset, -3.5 * offset, 0)
                 tick = ticks[index]
             line(ax, loc1, loc2, color=axes_colors['b'], **kwargs)
             x, y = project_point(text_location)
-            ax.text(x, y, str(tick), horizontalalignment="center",
-                color=axes_colors['b'], fontsize=fsize)
+            s = tick_formats['b'] % tick
+            ax.text(x, y, s, horizontalalignment="center",
+                    color=axes_colors['b'], fontsize=fontsize)

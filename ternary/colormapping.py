@@ -1,14 +1,14 @@
 import matplotlib
-from matplotlib import pyplot
+from matplotlib import pyplot as plt
 from matplotlib.colors import rgb2hex
-
 
 ## Default colormap, other options here: http://www.scipy.org/Cookbook/Matplotlib/Show_colormaps
 s = matplotlib.__version__.split('.')
-if int(s[0]) >= 1 and int(s[1]) >= 5:
+if int(s[0]) >= 2 or (int(s[0]) >= 1 and int(s[1]) >= 5):
     DEFAULT_COLOR_MAP_NAME = "viridis"
 else:
-    DEFAULT_COLOR_MAP_NAME = 'jet'
+    DEFAULT_COLOR_MAP_NAME = "jet"
+
 
 ## Matplotlib Colormapping ##
 
@@ -18,7 +18,7 @@ def get_cmap(cmap=None):
 
     Parameters
     ----------
-    cmap, string or matplotlib.colors.Colormap instance
+    cmap: string or matplotlib.colors.Colormap instance
         The name of the Matplotlib colormap to look up.
 
     Returns
@@ -36,7 +36,8 @@ def get_cmap(cmap=None):
         cmap_name = cmap
     else:
         cmap_name = DEFAULT_COLOR_MAP_NAME
-    return pyplot.get_cmap(cmap_name)
+    return plt.get_cmap(cmap_name)
+
 
 def colormapper(value, lower=0, upper=1, cmap=None):
     """
@@ -45,11 +46,11 @@ def colormapper(value, lower=0, upper=1, cmap=None):
 
     Parameters
     ----------
-    x: float
+    value: float
         The value to be colormapped
-    a: float
+    lower: float
         Lower bound of colors
-    b: float
+    upper: float
         Upper bound of colors
     cmap: String or matplotlib.colors.Colormap (optional)
         Colormap object to prevent repeated lookup
@@ -67,6 +68,7 @@ def colormapper(value, lower=0, upper=1, cmap=None):
         rgba = cmap((value - lower) / float(upper - lower))
     hex_ = rgb2hex(rgba)
     return hex_
+
 
 def colorbar_hack(ax, vmin, vmax, cmap, scientific=False, cbarlabel=None,
                   **kwargs):
@@ -86,11 +88,10 @@ def colorbar_hack(ax, vmin, vmax, cmap, scientific=False, cbarlabel=None,
 
     """
     # http://stackoverflow.com/questions/8342549/matplotlib-add-colorbar-to-a-sequence-of-line-plots
-    norm = pyplot.Normalize(vmin=vmin, vmax=vmax)
-    sm = pyplot.cm.ScalarMappable(cmap=cmap, norm=norm)
-    # Fake up the array of the scalar mappable. Urgh...
+    norm = plt.Normalize(vmin=vmin, vmax=vmax)
+    sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
     sm._A = []
-    cb = pyplot.colorbar(sm, ax=ax, **kwargs)
+    cb = plt.colorbar(sm, ax=ax, **kwargs)
     if cbarlabel is not None:
         cb.set_label(cbarlabel)
     if scientific:
