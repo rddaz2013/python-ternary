@@ -93,19 +93,15 @@ def generate_hexagon_deltas():
     i_vec_down = numpy.array([1./2, -1./2, 0])
     deltaX_vec = numpy.array([1./2, 0, -1./2])
 
-    d = dict()
-    # Corner Points
-    d["100"] = [zero, -deltaX_vec, -deltadown, -i_vec_down]
-    d["010"] = [zero, i_vec_down, -alpha, -i_vec]
-    d["001"] = [zero, i_vec, deltaup, deltaX_vec]
-    # On the Edges
-    d["011"] = [i_vec, deltaup, deltadown, -alpha, -i_vec]
-    d["101"] = [-deltaX_vec, -deltadown, alpha, deltaup, deltaX_vec]
-    d["110"] = [i_vec_down, -alpha, -deltaup, -deltadown, -i_vec_down]
-    # Interior point
-    d["111"] = [alpha, deltaup, deltadown, -alpha, -deltaup, -deltadown]
-
-    return d
+    return {
+        '100': [zero, -deltaX_vec, -deltadown, -i_vec_down],
+        '010': [zero, i_vec_down, -alpha, -i_vec],
+        '001': [zero, i_vec, deltaup, deltaX_vec],
+        '011': [i_vec, deltaup, deltadown, -alpha, -i_vec],
+        '101': [-deltaX_vec, -deltadown, alpha, deltaup, deltaX_vec],
+        '110': [i_vec_down, -alpha, -deltaup, -deltadown, -i_vec_down],
+        '111': [alpha, deltaup, deltadown, -alpha, -deltaup, -deltadown],
+    }
 
 
 hexagon_deltas = generate_hexagon_deltas()
@@ -124,12 +120,7 @@ def hexagon_coordinates(i, j, k):
     A numpy array of coordinates of the hexagon (unprojected)
     """
 
-    signature = ""
-    for x in [i, j, k]:
-        if x == 0:
-            signature += "0"
-        else:
-            signature += "1"
+    signature = "".join("0" if x == 0 else "1" for x in [i, j, k])
     deltas = hexagon_deltas[signature]
     center = numpy.array([i, j, k])
     return numpy.array([center + x for x in deltas])
@@ -145,12 +136,7 @@ def polygon_generator(data, scale, style, permutation=None):
     # passing around permutation more than necessary
     project = functools.partial(project_point, permutation=permutation)
 
-    if isinstance(data, dict):
-        data_gen = data.items()
-    else:
-        # Only works with style == 'h'
-        data_gen = data
-
+    data_gen = data.items() if isinstance(data, dict) else data
     for key, value in data_gen:
         if value is None:
             continue
@@ -248,16 +234,13 @@ def heatmap(data, scale, vmin=None, vmax=None, cmap=None, ax=None,
     for vertices, value in vertices_values:
         if value is None:
             continue
-        if not use_rgba:
-            color = colormapper(value, vmin, vmax, cmap=cmap)
-        else:
-            color = value  # rgba tuple (r,g,b,a) all in [0,1]
+        color = colormapper(value, vmin, vmax, cmap=cmap) if not use_rgba else value
         # Matplotlib wants a list of xs and a list of ys
         xs, ys = unzip(vertices)
         ax.fill(xs, ys, facecolor=color, edgecolor=color)
 
     if not cb_kwargs:
-        cb_kwargs = dict()
+        cb_kwargs = {}
     if colorbar:
         colorbar_hack(ax, vmin, vmax, cmap, scientific=scientific,
                       cbarlabel=cbarlabel, **cb_kwargs)
@@ -309,7 +292,7 @@ def heatmapf(func, scale=10, boundary=True, cmap=None, ax=None,
     """
 
     # Apply the function to a simplex partition
-    data = dict()
+    data = {}
     for i, j, k in simplex_iterator(scale=scale, boundary=boundary):
         data[(i, j)] = func(normalize([i, j, k]))
     # Pass everything to the heatmapper
@@ -336,12 +319,12 @@ def svg_polygon(coordinates, color):
     string, the svg string for the polygon
     """
 
-    coord_str = []
-    for c in coordinates:
-        coord_str.append(",".join(map(str, c)))
+    coord_str = [",".join(map(str, c)) for c in coordinates]
     coord_str = " ".join(coord_str)
-    polygon = '<polygon points="%s" style="fill:%s;stroke:%s;stroke-width:0"/>\n' % (coord_str, color, color)
-    return polygon
+    return (
+        '<polygon points="%s" style="fill:%s;stroke:%s;stroke-width:0"/>\n'
+        % (coord_str, color, color)
+    )
 
 
 def svg_heatmap(data, scale, filename, vmax=None, vmin=None, style='h',
@@ -380,7 +363,7 @@ def svg_heatmap(data, scale, filename, vmax=None, vmin=None, style='h',
         raise ValueError("Heatmap style must be 'triangular', 'dual-triangular', or 'hexagonal'")
 
     if not isinstance(data, dict):
-        if not style == 'h':
+        if style != 'h':
             raise ValueError("Data can only be given as a generator for hexagonal style heatmaps because of blending for adjacent polygons.")
         elif vmax is None or vmin is None:
             raise ValueError("vmax and vmin must be supplied for data given as a generator.")

@@ -116,7 +116,7 @@ def boundary(ax, scale, axes_colors=None, **kwargs):
 
     # Set default color as black.
     if axes_colors is None:
-        axes_colors = dict()
+        axes_colors = {}
     for _axis in ['l', 'r', 'b']:
         if _axis not in axes_colors.keys():
             axes_colors[_axis] = 'black'
@@ -141,7 +141,7 @@ def merge_dicts(base, updates):
     if not base:
         base = dict()
     if not updates:
-        updates = dict()
+        updates = {}
     z = base.copy()
     z.update(updates)
     return z
@@ -265,7 +265,7 @@ def ticks(ax, scale, ticks=None, locations=None, multiple=1, axis='b',
 
     # Default color: black
     if axes_colors is None:
-        axes_colors = dict()
+        axes_colors = {}
     for _axis in valid_axis_chars:
         if _axis not in axes_colors:
             axes_colors[_axis] = 'black'

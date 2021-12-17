@@ -32,10 +32,7 @@ def get_cmap(cmap=None):
 
     if isinstance(cmap, matplotlib.colors.Colormap):
         return cmap
-    if isinstance(cmap, str):
-        cmap_name = cmap
-    else:
-        cmap_name = DEFAULT_COLOR_MAP_NAME
+    cmap_name = cmap if isinstance(cmap, str) else DEFAULT_COLOR_MAP_NAME
     return plt.get_cmap(cmap_name)
 
 
@@ -66,8 +63,7 @@ def colormapper(value, lower=0, upper=1, cmap=None):
         rgba = cmap(0)
     else:
         rgba = cmap((value - lower) / float(upper - lower))
-    hex_ = rgb2hex(rgba)
-    return hex_
+    return rgb2hex(rgba)
 
 
 def colorbar_hack(ax, vmin, vmax, cmap, scientific=False, cbarlabel=None,

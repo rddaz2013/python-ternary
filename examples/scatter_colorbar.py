@@ -30,8 +30,7 @@ def _en_to_enth(energy,concs,A,B,C):
        The enthalpy of formation.
     """
 
-    enth = abs(energy - concs[0]*A -concs[1]*B -concs[2]*C)
-    return enth
+    return abs(energy - concs[0]*A -concs[1]*B -concs[2]*C)
 
 
 def _energy_to_enthalpy(energy):
@@ -114,13 +113,11 @@ def _read_data(fname):
         for line in f:
             CE = abs(float(line.strip().split()[0]))
             VASP = abs(float(line.strip().split()[1]))
-            conc = [i for i in line.strip().split()[2:]]
+            conc = list(line.strip().split()[2:])
 
             conc_f = []
             for c in conc:
-                if '[' in c and ']' in c:
-                    conc_f.append(int(c[1:-1]))
-                elif '[' in c:
+                if '[' in c and ']' in c or '[' in c:
                     conc_f.append(int(c[1:-1]))
                 elif ']' in c or ',' in c:
                     conc_f.append(int(c[:-1]))

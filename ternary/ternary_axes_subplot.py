@@ -65,8 +65,8 @@ class TernaryAxesSubplot(object):
         self._boundary_scale = scale
         # Container for the axis labels supplied by the user
         self._labels = dict()
-        self._corner_labels = dict()
-        self._ticks = dict()
+        self._corner_labels = {}
+        self._ticks = {}
         # Container for the redrawing of labels
         self._to_remove = []
         self._connect_callbacks()
@@ -407,9 +407,8 @@ class TernaryAxesSubplot(object):
     def scatter(self, points, **kwargs):
         ax = self.get_axes()
         permutation = self._permutation
-        plot_ = plotting.scatter(points, ax=ax, permutation=permutation,
+        return plotting.scatter(points, ax=ax, permutation=permutation,
                                  **kwargs)
-        return plot_
 
     def plot(self, points, **kwargs):
         ax = self.get_axes()

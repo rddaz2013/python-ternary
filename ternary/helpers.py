@@ -62,9 +62,7 @@ def simplex_iterator(scale, boundary=True):
     number for scale + 1, less 3*(scale+1) if boundary=False
     """
 
-    start = 0
-    if not boundary:
-        start = 1
+    start = 1 if not boundary else 0
     for i in range(start, scale + (1 - start)):
         for j in range(start, scale + (1 - start) - i):
             k = scale - i - j
@@ -145,10 +143,7 @@ def convert_coordinates(q, conversion, axisorder):
     p: 3-tuple
        The point converted to simplex coordinates.
     """
-    p = []
-    for k in range(3):
-        p.append(conversion[axisorder[k]](q[k]))
-
+    p = [conversion[axisorder[k]](q[k]) for k in range(3)]
     return tuple(p)
 
 
@@ -162,11 +157,9 @@ def get_conversion(scale, limits):
     fl = float(scale) / float(limits['l'][1] - limits['l'][0])
     fr = float(scale) / float(limits['r'][1] - limits['r'][0])
 
-    conversion = {"b": lambda x: (x - limits['b'][0]) * fb,
+    return {"b": lambda x: (x - limits['b'][0]) * fb,
                   "l": lambda x: (x - limits['l'][0]) * fl,
                   "r": lambda x: (x - limits['r'][0]) * fr}
-
-    return conversion
     
 
 def convert_coordinates_sequence(qs, scale, limits, axisorder):

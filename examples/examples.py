@@ -17,7 +17,7 @@ def load_sample_trajectory_data(filename="curve.txt", directory="sample_data"):
 
 def random_points(num_points=25, scale=40):
     points = []
-    for i in range(num_points):
+    for _ in range(num_points):
         x = random.randint(1, scale)
         y = random.randint(0, scale - x)
         z = scale - x - y
